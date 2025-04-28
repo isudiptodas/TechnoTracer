@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+@plugin "tailwindcss-motion";
+
+@font-face {
+    font-family: "Dune-Rise";
+    src: url('./assets/fonts/Dune_Rise.ttf') format('truetype');
+}
+@font-face {
+    font-family: "Neuropol";
+    src: url('./assets/fonts/Neuropol.otf') format('opentype');
+}
+
+@theme {
+    --font-Montserrat: "Montserrat", "sans-serif"; 
+    --font-Neuropol: "Neuropol", "sans-serif"; 
+    --font-DuneRise: "Dune-Rise", "sans-serif"; 
+  }
