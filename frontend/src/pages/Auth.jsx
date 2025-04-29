@@ -79,7 +79,7 @@ function Auth() {
               <span onClick={() => setVisible(!visible)} className="absolute top-1/2 -translate-y-1/2 right-5 opacity-60 cursor-pointer">{visible ? <FaEye /> : <FaEyeSlash />}</span>
             </div>
             <p onClick={() => setOption('signup')} className="text-white w-full text-center text-[10px] lg:text-sm cursor-pointer">Don't have an account ? <Link>Create one</Link></p>
-            <p onClick={login} className="w-full py-2 text-center rounded-md lg:rounded-lg bg-gradient-to-r from-orange-400 via-yellow-400 to-emerald-500 text-white cursor-pointer hover:opacity-75 duration-200 ease-in-out active:scale-95 flex justify-center items-center gap-2">Enter <IoEnterOutline /></p>
+            <p onClick={login} className="w-full py-2 text-center mt-3 rounded-md lg:rounded-lg bg-gradient-to-r from-orange-400 via-yellow-400 to-emerald-500 text-white cursor-pointer hover:opacity-75 duration-200 ease-in-out active:scale-95 flex justify-center items-center gap-2">Enter <IoEnterOutline /></p>
           </div>
 
           <div className={`${option === 'signup' ? "block" : "hidden"} w-full rounded-md px-3 h-auto py-4 flex flex-col justify-start items-center gap-3`}>
@@ -94,12 +94,12 @@ function Auth() {
               <span onClick={() => setVisible(!visible)} className="absolute top-1/2 -translate-y-1/2 right-5 opacity-60 cursor-pointer">{visible ? <FaEye /> : <FaEyeSlash />}</span>
             </div>
             <p onClick={() => setOption('login')} className="text-white w-full text-center text-[10px] lg:text-sm cursor-pointer">Already have an account ? <Link>Login</Link></p>
-            <p onClick={register} className="w-full py-2 text-center rounded-md lg:rounded-lg bg-gradient-to-r from-orange-400 via-yellow-400 to-emerald-500 text-white cursor-pointer hover:opacity-75 duration-200 ease-in-out active:scale-95 flex justify-center items-center gap-2">Join <FaExternalLinkAlt /></p>
+            <p onClick={register} className="w-full py-2 text-center mt-3 rounded-md lg:rounded-lg bg-gradient-to-r from-orange-400 via-yellow-400 to-emerald-500 text-white cursor-pointer hover:opacity-75 duration-200 ease-in-out active:scale-95 flex justify-center items-center gap-2">Join <FaExternalLinkAlt /></p>
           </div>
         </div>
 
         <div className="w-full py-2 flex justify-center items-center mt-10 md:w-[60%] lg:w-[40%]">
-          <p className="w-auto text-center pl-4 pr-2 py-1 text-[12px] md:text-sm rounded-full font-Montserrat bg-white text-black flex justify-center items-center gap-2 duration-200 ease-in-out">Enter as <Link to='/admin/auth' className="px-3 font-semibold cursor-pointer hover:opacity-70 duration-200 ease-in-out py-2 md:py-1 rounded-full bg-gradient-to-br from-orange-500 via-yellow-400 to-emerald-500">Admin</Link></p>
+          <Link to='/admin/auth' className="w-auto text-center pl-4 pr-2 py-1 text-[12px] md:text-sm rounded-full font-Montserrat bg-white text-black flex justify-center items-center gap-2 duration-200 ease-in-out">Enter as admin ●</Link>
         </div>
 
       </div>
