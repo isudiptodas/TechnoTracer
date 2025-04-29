@@ -15,7 +15,7 @@ function LandingPage() {
         <div className="h-56 w-56 lg:h-[300px] lg:w-[600px] z-10 absolute rounded-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-black -top-20 left-24 blur-2xl lg:blur-[80px]"></div>
 
         {/* logo */}
-        <h1 className="w-full flex justify-center items-center py-5 lg:py-12 z-30 text-white font-DuneRise text-[10px] md:text-sm">TECHNOTRACER</h1>
+        <h1 className="w-full flex justify-center items-center py-5 lg:py-12 z-30 text-white font-DuneRise text-[10px] md:text-sm cursor-pointer hover:scale-110 hover:font-bold duration-200 ease-in-out">TECHNOTRACER</h1>
 
         {/* hero section */}
         <div className="w-[90%] z-30 backdrop-blur-3xl bg-white/15 h-auto py-5 lg:py-7 px-3 rounded-md lg:rounded-lg flex flex-col justify-center items-center gap-3">
@@ -24,7 +24,7 @@ function LandingPage() {
 
           <div className="w-full flex flex-col lg:flex-row justify-center items-center gap-5 lg:pt-5 lg:gap-3">
             <Link to='/auth' className="flex justify-center items-center gap-2 bg-white text-emerald-600 px-4 py-1 rounded-full hover:px-8 duration-200 ease-in-out cursor-pointer active:scale-95 mt-2lg:mt-0">Join <BsBoxArrowInUpRight /></Link>
-            <Link to='/auth' className="text-white rounded-full px-4 py-1 border-2 flex justify-center items-center gap-2 cursor-pointer border-dashed lg:mt-0">Enter Profile <RiArrowDropRightLine /></Link>
+            <Link to='/user/dashboard' className="text-white rounded-full px-4 py-1 border-2 flex justify-center items-center gap-2 cursor-pointer border-dashed lg:mt-0">Enter Profile <RiArrowDropRightLine /></Link>
           </div>
         </div>
 
