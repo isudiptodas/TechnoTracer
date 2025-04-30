@@ -5,7 +5,7 @@ function ItemBox({title, date, found}) {
   return (
     
     <>
-      <div className="w-full h-auto px-3 py-3 rounded-md bg-zinc-900 flex flex-col justify-evenly items-center gap-2 overflow-hidden">
+      <div className="w-full h-auto px-3 py-3 rounded-md bg-zinc-800 flex flex-col justify-evenly items-center gap-2 overflow-hidden">
         <img src={image} className='h-32 w-full rounded-lg object-cover' />
         <h1 className="w-full text-white text-start text-sm lg:text-xl font-semibold font-Montserrat capitalize">{title}</h1>
         <p className="w-full text-start text-gray-300 text-[10px] lg:text-sm">Date : {date}</p>
