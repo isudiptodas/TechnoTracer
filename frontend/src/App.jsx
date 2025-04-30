@@ -5,6 +5,8 @@ import AdminAuth from "./pages/admin/AdminAuth.jsx";
 import About from "./pages/About.jsx";
 import Privacy from "./pages/Privacy.jsx";
 import Terms from "./pages/Terms.jsx";
+import Settings from "./pages/user/Settings.jsx";
+
 import { Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -14,6 +16,7 @@ function App() {
         <Route path="/" element={<LandingPage/>}/>
         <Route path="/auth" element={<Auth/>}/>
         <Route path="/user/dashboard" element={<Dashboard/>}/>
+        <Route path="/user/settings" element={<Settings/>}/>
         <Route path="/admin/auth" element={<AdminAuth/>}/>
         <Route path="/about" element={<About/>}/>
         <Route path="/terms" element={<Terms/>}/>
