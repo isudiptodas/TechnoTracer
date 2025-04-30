@@ -6,13 +6,24 @@
     font-family: "Dune-Rise";
     src: url('./assets/fonts/Dune_Rise.ttf') format('truetype');
 }
+
 @font-face {
     font-family: "Neuropol";
     src: url('./assets/fonts/Neuropol.otf') format('opentype');
 }
 
 @theme {
-    --font-Montserrat: "Montserrat", "sans-serif"; 
-    --font-Neuropol: "Neuropol", "sans-serif"; 
-    --font-DuneRise: "Dune-Rise", "sans-serif"; 
-  }
+    --font-Montserrat: "Montserrat", "sans-serif";
+    --font-Neuropol: "Neuropol", "sans-serif";
+    --font-DuneRise: "Dune-Rise", "sans-serif";
+}
+
+html,
+.sidebar,
+.content {
+    scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
