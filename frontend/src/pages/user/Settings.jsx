@@ -100,7 +100,7 @@ function Settings() {
                         </div>
                     </div>
 
-                    <p className='w-full py-2 lg:py-3 text-center bg-gradient-to-r from-emerald-400 to-emerald-600 text-white capitalize rounded-md cursor-pointer hover:opacity-70 duration-150 ease-in-out font-Montserrat my-2 font-semibold '>Update profile</p>
+                    <p className='w-full py-2 lg:py-3 text-center bg-white text-black capitalize rounded-md cursor-pointer hover:opacity-70 duration-200 ease-in-out font-Montserrat my-2 font-semibold active:scale-95'>Update profile</p>
                 </div>
 
                 <Footer />
