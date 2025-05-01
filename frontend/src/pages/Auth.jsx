@@ -5,6 +5,7 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import { IoEnterOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { toast } from 'sonner';
+import Footer from "../components/Footer";
 
 function Auth() {
 
@@ -98,9 +99,11 @@ function Auth() {
           </div>
         </div>
 
-        <div className="w-full py-2 flex justify-center items-center mt-10 md:w-[60%] lg:w-[40%]">
-          <Link to='/admin/auth' className="w-auto text-center pl-4 pr-2 py-1 text-[12px] md:text-sm rounded-full font-Montserrat bg-white text-black flex justify-center items-center gap-2 duration-200 ease-in-out">Enter as admin ●</Link>
+        <div className="w-full mb-20 py-2 flex justify-center items-center mt-10 md:w-[60%] lg:w-[40%]">
+          <Link to='/admin/auth' className="w-auto active:scale-95 text-center pl-4 pr-2 py-1 text-[12px] md:text-sm rounded-full font-Montserrat bg-white text-black flex justify-center items-center gap-2 duration-200 ease-in-out">Enter as admin ●</Link>
         </div>
+
+        <Footer/>
 
       </div>
     </>
