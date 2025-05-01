@@ -27,3 +27,8 @@ html,
 ::-webkit-scrollbar {
     display: none;
 }
+
+.active {
+    color: rgb(255, 166, 0);
+    font-weight: 400;
+}
