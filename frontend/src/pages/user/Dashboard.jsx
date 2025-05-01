@@ -5,11 +5,13 @@ import { TfiArrowTopRight } from "react-icons/tfi";
 import MenuBar from '../../components/MenuBar';
 import ItemBox from '../../components/ItemBox';
 import Footer from '../../components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
 
   const[filter, setFilter] = useState('');
   const[visible, setVisible] = useState(false);
+  const navigate = useNavigate();
 
   const data = [
     {
@@ -72,7 +74,11 @@ function Dashboard() {
       date: `29.04.25`,
       found: `campus floor`
     },
-  ]
+  ];
+
+  const navigateClaim = (Data) => {
+    navigate('/user/item/details', {state: Data});
+  }
 
   return (
 
@@ -121,7 +127,7 @@ function Dashboard() {
 
           <div className='w-full md:w-[70%] h-auto py-4 px-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-items-center gap-3'>
               {data.map((it, index)=> {
-                return <ItemBox found={it.found} title={it.title} date={it.date} key={index}/>
+                return <ItemBox found={it.found} title={it.title} date={it.date} key={index} clickNavigate={() => navigateClaim(it)}/>
               })}
           </div>
         </div>
