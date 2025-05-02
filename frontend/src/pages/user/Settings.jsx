@@ -1,12 +1,15 @@
 import MenuBar from '../../components/MenuBar.jsx'
 import Footer from '../../components/Footer.jsx'
 import profile from '../../assets/profile.jpg';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { FaTrashAlt } from "react-icons/fa";
 import { IoIosCloudUpload } from "react-icons/io";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { states } from '../../data/states.js';
 import { colleges } from '../../data/college.js';
+import Vapi from "@vapi-ai/web";
+import { FaRegCircleStop } from "react-icons/fa6";
+import { LuSparkle } from "react-icons/lu";
 
 function Settings() {
 
@@ -16,20 +19,68 @@ function Settings() {
     const [state, setState] = useState('select');
     const [college, setCollege] = useState('select');
     const [allCollege, setAllCollege] = useState([]);
-    const[uploadVisible, setUploadVisible] = useState(false);
-    const[image, setImage] = useState(null);
+    const [uploadVisible, setUploadVisible] = useState(false);
+    const [image, setImage] = useState(null);
+
+    const [started, setStarted] = useState(false);
+
+    const vapi = useRef(null);
+
+    useEffect(() => {
+        vapi.current = new Vapi(import.meta.env.VITE_VAPI_PUBLIC);
+    }, []);
+
+    const askAI = async () => {
+        const options = {
+            transcriber: {
+                provider: "deepgram",
+                model: "nova-2",
+                language: "en-US",
+            },
+            model: {
+                provider: "openai",
+                model: "gpt-3.5-turbo",
+                messages: [
+                    {
+                        role: "system",
+                        content: `You are a voice assistant for a platform named "Technotracer" which is a campus lost and 
+                found items platform. Whenever any user ask any query you have to give appropriate answer based on the below context.
+                Answer only what was asked and nothing extra.
+                Context : 
+                In the dashboard section users can see list of all the items that people posted as found in the campus.
+                If any user finds a new item and want to post it theb they can do it in report new items section which is available in the menubar (top right corner).
+                If any user want to claim any item then visit the details page of the item and from there they can claim it and while claiming they need to submit proper
+                proof of ownership for the admin to verify.`,
+                    },
+                ],
+            },
+            voice: {
+                provider: "playht",
+                voiceId: "jennifer",
+            },
+            name: "Technotracer voice assistant",
+        }
+        vapi.current?.start(options);
+        setStarted(true);
+        vapi.current?.say("Hello, I am your assistant for technotracer...how can i help you ?");
+    }
+
+    const stopAI = async () => {
+        vapi.current?.stop();
+        setStarted(false);
+    }
 
     const handleCollege = (name) => {
         //console.log(name);
-        
-        for(let i = 0; i<=colleges.length; i++){
-            if(colleges[i].state === name){
+
+        for (let i = 0; i <= colleges.length; i++) {
+            if (colleges[i].state === name) {
                 //console.log(colleges[i]);
                 const all = colleges[i].college;
                 setAllCollege(all);
                 return;
             }
-        }        
+        }
     }
 
     const handleSelect = (e) => {
@@ -41,6 +92,9 @@ function Settings() {
         <>
             <div className='w-full z-10 min-h-screen bg-black flex flex-col justify-start items-center overflow-hidden relative' >
                 <MenuBar />
+
+                <p onClick={askAI} className={`w-auto ${started ? "hidden" : "block"} z-30 px-5 text-[12px] hover:opacity-75 shadow-md lg:text-lg lg:right-10 lg:bottom-12 py-2 rounded-full cursor-pointer active:scale-95 duration-200 ease-in-out font-Montserrat bg-white text-black fixed bottom-9 right-5 flex justify-center items-center gap-2`}>Ask AI <LuSparkle /></p>
+                <p onClick={stopAI} className={`w-auto ${started ? "block" : "hidden"} z-30 px-5 text-[12px] lg:text-lg lg:right-10 lg:bottom-12 py-2 rounded-full cursor-pointer active:scale-95 duration-200 ease-in-out text-white font-Montserrat bg-gradient-to-r from-red-400 via-red-500 to-red-800 fixed bottom-9 right-5 flex justify-center items-center gap-2`}>Stop AI <FaRegCircleStop /></p>
 
                 {/* profile pic enlarged */}
                 <div className={`${profileVisible ? "scale-100 opacity-100 z-40" : "scale-0 opacity-0 z-30"} z-40 duration-300 ease-in-out transition-all w-[90%] h-[40%] lg:w-1/3 lg:h-1/2 rounded-md lg:rounded-lg overflow-hidden absolute top-32 bg-white`}>
@@ -62,7 +116,7 @@ function Settings() {
                 {/* picture info div */}
                 <div className='h-auto py-3 w-[60%] flex flex-col justify-start px-2 items-center'>
                     <p className='w-full text-center text-white text-2xl md:text-4xl font-Montserrat mb-2'>Sudipto Das</p>
-                    <div className='w-full lg:w-[50%] xl:w-[35%] flex flex-col justify-center items-center lg:flex-row'>
+                    <div className='w-full lg:w-[50%] xl:w-[40%] flex flex-col justify-center items-center lg:flex-row'>
                         <p className='w-full text-center text-red-500 text-[12px] md:text-sm cursor-pointer flex justify-center items-center gap-2 font-Montserrat mb-1'>Remove Picture <FaTrashAlt /></p>
                         <p onClick={() => setUploadVisible(!uploadVisible)} className='w-full text-center text-blue-400 text-[12px] md:text-sm cursor-pointer flex justify-center items-center gap-2 font-Montserrat'>Change Picture <IoIosCloudUpload /></p>
                     </div>
@@ -70,7 +124,7 @@ function Settings() {
                     <div className={`${uploadVisible ? "block" : "hidden"} w-full pt-5 flex flex-col justify-center items-center gap-2`}>
                         <input onChange={(e) => handleSelect(e.target.files[0])} type="file" className='w-full bg-white text-black font-Montserrat py-1 px-4 text-[12px] rounded-full text-center' />
                         <p className={`${image === null ? "hidden" : "block"} w-full py-2 text-[12px] lg:text-sm bg-blue-600 text-white font-Montserrat text-center rounded-md cursor-pointer hover:opacity-70 duration-200 ease-in-out`}>Upload</p>
-                        <p onClick={() => {setImage(null); setUploadVisible(false)}} className={`${image === null ? "hidden" : "block"} w-full py-2 text-[12px] lg:text-sm bg-red-500 text-white font-Montserrat text-center rounded-md cursor-pointer hover:opacity-70 duration-200 ease-in-out`}>Cancel</p>
+                        <p onClick={() => { setImage(null); setUploadVisible(false) }} className={`${image === null ? "hidden" : "block"} w-full py-2 text-[12px] lg:text-sm bg-red-500 text-white font-Montserrat text-center rounded-md cursor-pointer hover:opacity-70 duration-200 ease-in-out`}>Cancel</p>
                     </div>
                 </div>
 
