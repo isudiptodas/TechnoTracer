@@ -1,5 +1,6 @@
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
 
 function About() {
     return (
@@ -17,6 +18,10 @@ function About() {
                     way for students, faculty, and staff to report and recover lost items. With a user-friendly interface and a robust verification process, we aim to reunite lost 
                     items with their rightful owners quickly and securely.
                 </p>
+
+                <div className="h-[60vh]"></div>
+
+                <Footer/>
 
             </div>
         </>
