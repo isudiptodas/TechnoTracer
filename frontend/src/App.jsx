@@ -9,6 +9,7 @@ import Settings from "./pages/user/Settings.jsx";
 import Report from "./pages/user/Report.jsx";
 import PastListing from "./pages/user/PastListing.jsx";
 import ClaimPage from "./pages/user/ClaimPage.jsx";
+import Feedback from "./pages/Feedback.jsx";
 
 import { Routes, Route } from 'react-router-dom';
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/about" element={<About/>}/>
         <Route path="/terms" element={<Terms/>}/>
         <Route path="/privacy" element={<Privacy/>}/>
+        <Route path="/feedback" element={<Feedback/>}/>
       </Routes>
     </>
   )
