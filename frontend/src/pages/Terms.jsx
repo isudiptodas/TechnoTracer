@@ -1,5 +1,6 @@
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
 
 function Terms() {
 
@@ -35,7 +36,10 @@ function Terms() {
                 <p className="w-full md:w-[70%] text-center md:text-start text-[10px] md:text-sm text-white font-Montserrat px-10 py-2">1. Loss or damage to items during the recovery process.</p>
                 <p className="w-full md:w-[70%] text-center md:text-start text-[10px] md:text-sm text-white font-Montserrat px-10 py-2">2. Errors or inaccuracies in user-submitted information.</p>
                 <p className="w-full md:w-[70%] text-center md:text-start text-[10px] md:text-sm text-white font-Montserrat px-10 py-2">3. Any missing or damaged product in case of electronic goods.</p>
-            
+                
+                <div className="h-[40vh]"></div>
+
+                <Footer/>
             </div>
         </>
     )
