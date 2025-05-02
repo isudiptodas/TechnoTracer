@@ -1,5 +1,6 @@
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
 
 function Privacy() {
 
@@ -27,6 +28,11 @@ function Privacy() {
                 <p className="w-full md:w-[70%] text-center md:text-start text-[10px] md:text-sm text-white font-Montserrat px-10 py-2">We follow best industry practices to encrypt and safeguard your personal data, as your data is our first priority.
                     Data such as passwords (hashed), documents of ownership proof (stored securely in cloud backup in case of future reference)
                 </p>
+
+                <div className="h-[40vh]"></div>
+
+                <Footer/>
+
                
             </div>
         </>
