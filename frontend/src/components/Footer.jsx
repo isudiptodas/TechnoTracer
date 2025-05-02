@@ -10,6 +10,7 @@ function Footer() {
                     <Link to='/about' className="font-Montserrat text-sm xl:text-lg hover:font-semibold cursor-pointer hover:scale-110 duration-200 ease-in-out">About</Link>
                     <Link to='/privacy' className="font-Montserrat text-sm xl:text-lg hover:font-semibold cursor-pointer hover:scale-110 duration-200 ease-in-out">Privacy Policy</Link>
                     <Link to='/terms' className="font-Montserrat text-sm xl:text-lg hover:font-semibold cursor-pointer hover:scale-110 duration-200 ease-in-out">Terms of Use</Link>
+                    <Link to='/feedback' className="font-Montserrat text-sm xl:text-lg hover:font-semibold cursor-pointer hover:scale-110 duration-200 ease-in-out">Feedback</Link>
                 </div>
             </div>
         </>
