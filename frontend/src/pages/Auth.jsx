@@ -6,6 +6,9 @@ import { IoEnterOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { toast } from 'sonner';
 import Footer from "../components/Footer";
+import { MdOutlineArrowDropDown } from "react-icons/md";
+import { states } from "../data/states";
+import { colleges } from "../data/college";
 
 function Auth() {
 
@@ -15,9 +18,14 @@ function Auth() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const [stateVisible, setStateVisible] = useState(false);
+  const [collegeVisible, setCollegeVisible] = useState(false);
+  const [state, setState] = useState('select');
+  const [college, setCollege] = useState('select');
+  const [allCollege, setAllCollege] = useState([]);
 
   const register = async () => {
-    if (!email || !password || !name || !confirm) {
+    if (!email || !password || !name || !confirm || !state || !college) {
       toast.error("All fields required");
       return;
     }
@@ -58,6 +66,19 @@ function Auth() {
     }
   }
 
+  const handleCollege = (name) => {
+    //console.log(name);
+
+    for (let i = 0; i <= colleges.length; i++) {
+      if (colleges[i].state === name) {
+        //console.log(colleges[i]);
+        const all = colleges[i].college;
+        setAllCollege(all);
+        return;
+      }
+    }
+  }
+
   return (
     <>
       <div className="w-full min-h-screen bg-black overflow-hidden flex flex-col justify-start items-center relative">
@@ -94,6 +115,26 @@ function Auth() {
               <input onChange={(e) => setConfirm(e.target.value)} value={confirm} type={visible ? "text" : "password"} className="w-full rounded-md bg-gray-200 px-3 py-2 outline-none" placeholder="Confirm password" />
               <span onClick={() => setVisible(!visible)} className="absolute top-1/2 -translate-y-1/2 right-5 opacity-60 cursor-pointer">{visible ? <FaEye /> : <FaEyeSlash />}</span>
             </div>
+
+            <p className='text-white font-Montserrat text-sm w-full text-start capitalize'>Choose state : </p>
+            <p onClick={() => setStateVisible(!stateVisible)} className={`bg-gray-200 text-black duration-200 ease-in-out w-full py-2 px-3 rounded-md capitalize text-sm lg:text-[16px] flex justify-between cursor-pointer items-center gap-2`}>{state} <MdOutlineArrowDropDown /></p>
+
+            <div className={`${stateVisible ? "block" : "hidden"} w-full h-56 rounded-md bg-gray-200 px-1 py-1 flex flex-col justify-start items-center gap-2 overflow-y-auto`}>
+              {states.map((st, index) => {
+                return <p onClick={() => { setState(st); setStateVisible(false); handleCollege(st); }} key={index} className='text-black w-full px-3 py-2 rounded-md hover:bg-gray-400 text-start font-Montserrat text-sm capitalize cursor-pointer duration-150 ease-in-out'>{st}</p>
+              })}
+            </div>
+
+            <div className={`${state === 'select' ? "hidden" : "block"} w-full flex flex-col justify-center items-center gap-3`}>
+              <p className='text-white font-Montserrat text-sm w-full text-start capitalize'>Choose college : </p>
+              <p onClick={() => setCollegeVisible(!collegeVisible)} className={`bg-gray-200 text-black duration-200 ease-in-out w-full py-2 px-3 rounded-md capitalize text-sm lg:text-[16px] flex justify-between cursor-pointer items-center gap-2`}>{college} <MdOutlineArrowDropDown /></p>
+
+              <div className={`${collegeVisible ? "block" : "hidden"} w-full h-56 rounded-md bg-gray-200 px-1 py-1 flex flex-col justify-start items-center gap-2 overflow-y-auto`}>
+                {allCollege.map((col, index) => {
+                  return <p onClick={() => { setCollege(col); setCollegeVisible(false); }} key={index} className='text-black w-full px-3 py-2 rounded-md hover:bg-gray-400 text-start font-Montserrat text-sm capitalize cursor-pointer duration-150 ease-in-out'>{col}</p>
+                })}
+              </div>
+            </div>
             <p onClick={() => setOption('login')} className="text-white w-full text-center text-[10px] lg:text-sm cursor-pointer">Already have an account ? <Link>Login</Link></p>
             <p onClick={register} className="w-full py-2 text-center mt-3 rounded-md lg:rounded-lg bg-gradient-to-r from-orange-400 via-yellow-400 to-emerald-500 text-white cursor-pointer hover:opacity-75 duration-200 ease-in-out active:scale-95 flex justify-center items-center gap-2">Join <FaExternalLinkAlt /></p>
           </div>
@@ -103,7 +144,10 @@ function Auth() {
           <Link to='/admin/auth' className="w-auto active:scale-95 text-center pl-4 pr-2 py-1 text-[12px] md:text-sm rounded-full font-Montserrat bg-white text-black flex justify-center items-center gap-2 duration-200 ease-in-out">Enter as admin ●</Link>
         </div>
 
-        <Footer/>
+        <div className="w-full h-44"></div>
+
+
+        <Footer />
 
       </div>
     </>
