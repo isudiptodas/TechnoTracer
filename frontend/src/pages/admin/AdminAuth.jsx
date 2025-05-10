@@ -55,6 +55,8 @@ function AdminAuth() {
                     <Link to='/auth' className="w-auto active:scale-95 duration-150 ease-in-out text-center pl-4 pr-2 py-1 text-[12px] md:text-sm rounded-full font-Montserrat bg-white text-black flex justify-center items-center gap-2 duration-200 ease-in-out">Enter as user ●</Link>
                 </div>
 
+                <div className="w-full h-44"></div>
+
                 <Footer/>
 
             </div>
