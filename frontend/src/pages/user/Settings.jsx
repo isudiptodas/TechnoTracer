@@ -4,21 +4,15 @@ import profile from '../../assets/profile.jpg';
 import { useState, useRef, useEffect } from 'react';
 import { FaTrashAlt } from "react-icons/fa";
 import { IoIosCloudUpload } from "react-icons/io";
-import { MdOutlineArrowDropDown } from "react-icons/md";
-import { states } from '../../data/states.js';
-import { colleges } from '../../data/college.js';
 import Vapi from "@vapi-ai/web";
 import { FaRegCircleStop } from "react-icons/fa6";
 import { LuSparkle } from "react-icons/lu";
+import { GoOrganization } from "react-icons/go";
+import { FaGlobeAmericas } from "react-icons/fa";
 
 function Settings() {
 
     const [profileVisible, setProfileVisible] = useState(false);
-    const [stateVisible, setStateVisible] = useState(false);
-    const [collegeVisible, setCollegeVisible] = useState(false);
-    const [state, setState] = useState('select');
-    const [college, setCollege] = useState('select');
-    const [allCollege, setAllCollege] = useState([]);
     const [uploadVisible, setUploadVisible] = useState(false);
     const [image, setImage] = useState(null);
 
@@ -70,19 +64,6 @@ function Settings() {
         setStarted(false);
     }
 
-    const handleCollege = (name) => {
-        //console.log(name);
-
-        for (let i = 0; i <= colleges.length; i++) {
-            if (colleges[i].state === name) {
-                //console.log(colleges[i]);
-                const all = colleges[i].college;
-                setAllCollege(all);
-                return;
-            }
-        }
-    }
-
     const handleSelect = (e) => {
         //console.log(e);
         setImage(e);
@@ -128,34 +109,22 @@ function Settings() {
                     </div>
                 </div>
 
+               <div className='w-full md:w-[70%] lg:w-[40%] flex flex-col justify-start items-start gap-2 mt-5 px-5'>
+               <p className='w-full text-white text-center font-Montserrat flex justify-center items-center gap-2'><span><GoOrganization /></span>Techno Main Salt Lake</p>
+               <p className='w-full text-white text-center font-Montserrat flex justify-center items-center gap-2'><span><FaGlobeAmericas /></span>West Bengal</p>
+               </div>
+
                 {/* basic info */}
                 <div className='w-full my-5 md:w-[70%] lg:w-[40%] py-4 px-4 flex flex-col justify-start items-center gap-3 relative'>
+
                     <input type="text" className='w-full rounded-md py-2 px-3 outline-none bg-zinc-800 text-white placeholder-gray-300' placeholder='Update name' />
                     <input type="email" className='w-full rounded-md py-2 px-3 outline-none bg-zinc-800 text-white placeholder-gray-300' placeholder='Update email' />
                     <input type="text" className='w-full rounded-md py-2 px-3 outline-none bg-zinc-800 text-white placeholder-gray-300' placeholder='Update contact' />
 
-                    <p className='text-white font-Montserrat text-sm w-full text-start capitalize'>Choose state : </p>
-                    <p onClick={() => setStateVisible(!stateVisible)} className={`${stateVisible ? "bg-white text-black" : "bg-zinc-800 text-white"} duration-200 ease-in-out w-full py-2 px-3 rounded-md capitalize text-sm lg:text-[16px] flex justify-between cursor-pointer items-center gap-2`}>{state} <MdOutlineArrowDropDown /></p>
-
-                    <div className={`${stateVisible ? "block" : "hidden"} w-full h-56 rounded-md bg-zinc-800 px-1 py-1 flex flex-col justify-start items-center gap-2 overflow-y-auto`}>
-                        {states.map((st, index) => {
-                            return <p onClick={() => { setState(st); setStateVisible(false); handleCollege(st); }} key={index} className='text-white w-full px-3 py-2 rounded-md hover:bg-black text-start font-Montserrat text-sm capitalize cursor-pointer duration-150 ease-in-out'>{st}</p>
-                        })}
-                    </div>
-
-                    <div className={`${state === 'select' ? "hidden" : "block"} w-full flex flex-col justify-center items-center gap-3`}>
-                        <p className='text-white font-Montserrat text-sm w-full text-start capitalize'>Choose college : </p>
-                        <p onClick={() => setCollegeVisible(!collegeVisible)} className={`${collegeVisible ? "bg-white text-black" : "bg-zinc-800 text-white"} duration-200 ease-in-out w-full py-2 px-3 rounded-md capitalize text-sm lg:text-[16px] flex justify-between cursor-pointer items-center gap-2`}>{college} <MdOutlineArrowDropDown /></p>
-
-                        <div className={`${collegeVisible ? "block" : "hidden"} w-full h-56 rounded-md bg-zinc-800 px-1 py-1 flex flex-col justify-start items-center gap-2 overflow-y-auto`}>
-                            {allCollege.map((col, index) => {
-                                return <p onClick={() => { setCollege(col); setCollegeVisible(false); }} key={index} className='text-white w-full px-3 py-2 rounded-md hover:bg-black text-start font-Montserrat text-sm capitalize cursor-pointer duration-150 ease-in-out'>{col}</p>
-                            })}
-                        </div>
-                    </div>
-
                     <p className='w-full py-2 lg:py-3 text-center bg-white text-black capitalize rounded-md cursor-pointer hover:opacity-70 duration-200 ease-in-out font-Montserrat my-2 font-semibold active:scale-95'>Update profile</p>
                 </div>
+
+                <div className="w-full h-44 lg:h-32"></div>
 
                 <Footer />
             </div>
