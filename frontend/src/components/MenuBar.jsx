@@ -4,6 +4,8 @@ import { CiMenuFries } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 function MenuBar() {
 
@@ -11,7 +13,19 @@ function MenuBar() {
     const navigate = useNavigate();
 
     const logout = async () => {
-        navigate('/');
+        try {
+            const res = await axios.post('http://localhost:8080/user/logout', {}, {
+                withCredentials: true
+            });
+
+            //console.log(res.data);
+
+             navigate('/');
+
+        } catch (err) {
+            toast.error(err?.response?.data);
+            console.log(err.message);
+        }
     }
 
     return (
@@ -24,7 +38,7 @@ function MenuBar() {
                 <NavLink to='/user/dashboard' className='text-white cursor-pointer font-Montserrat text-4xl font-light flex justify-center items-center gap-3 group'>Home <MdOutlineKeyboardArrowRight className='opacity-0 group-hover:opacity-100 duration-150 ease-in-out group-hover:scale-105' /></NavLink>
                 <NavLink to='/user/report' className='text-white cursor-pointer font-Montserrat text-4xl font-light flex justify-center items-center gap-3 group'>Report New Item <MdOutlineKeyboardArrowRight className='opacity-0 group-hover:opacity-100 duration-150 ease-in-out group-hover:scale-105' /></NavLink>
                 <NavLink to='/user/past-listing' className='text-white cursor-pointer font-Montserrat text-4xl font-light flex justify-center items-center gap-3 group'>Past Listings <MdOutlineKeyboardArrowRight className='opacity-0 group-hover:opacity-100 duration-150 ease-in-out group-hover:scale-105' /></NavLink>
-                <NavLink to='/testimonials' className='text-white cursor-pointer font-Montserrat text-4xl font-light flex justify-center items-center gap-3 group'>Testimonials <MdOutlineKeyboardArrowRight className='opacity-0 group-hover:opacity-100 duration-150 ease-in-out group-hover:scale-105' /></NavLink>
+                <NavLink to='/user/admin-contact' className='text-white cursor-pointer font-Montserrat text-4xl font-light flex justify-center items-center gap-3 group'>Contact Admin <MdOutlineKeyboardArrowRight className='opacity-0 group-hover:opacity-100 duration-150 ease-in-out group-hover:scale-105' /></NavLink>
                 <NavLink to='/user/settings' className='text-white cursor-pointer font-Montserrat text-4xl font-light flex justify-center items-center gap-3 group'>Settings <MdOutlineKeyboardArrowRight className='opacity-0 group-hover:opacity-100 duration-150 ease-in-out group-hover:scale-105' /></NavLink>
                 <p onClick={logout} className='text-red-500 cursor-pointer font-Montserrat text-4xl font-semibold'>Logout</p>
             </div>
