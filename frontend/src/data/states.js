@@ -1,18 +1,18 @@
 export const states = [
-    'andhra pradesh',
-    'arunachal pradesh', 
-    'assam',
-    'bihar',
-    'chhattisgarh',
-    'goa',
-    'gujarat',
-    'haryana',
+    'andhra pradesh',//done
+    'arunachal pradesh', //done
+    'assam',//done
+    'bihar',//done
+    'chhattisgarh', 
+    'goa',//done
+    'gujarat',//done
+    'haryana',//done
     'himachal pradesh',
     'jharkhand',
     'karnataka',
     'kerala',
     'madhya pradesh',
-    'maharashtra',
+    'maharashtra',//done
     'manipur',
     'meghalaya',
     'mizoram',
@@ -22,11 +22,11 @@ export const states = [
     'rajasthan',
     'sikkim',
     'tamil nadu',
-    'telangana',
+    'telangana',//done
     'tripura',
     'uttar pradesh',
     'uttarakhand',
-    'west bengal'
+    'west bengal' //done
 ];
 
 // arunachal pradesh
