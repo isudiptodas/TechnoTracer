@@ -9,13 +9,18 @@ import { useNavigate } from 'react-router-dom';
 import Vapi from "@vapi-ai/web";
 import { FaRegCircleStop } from "react-icons/fa6";
 import { LuSparkle } from "react-icons/lu";
+import axios from 'axios';
+import loading from '../../assets/loading.gif';
 
 function Dashboard() {
 
   const [filter, setFilter] = useState('');
+  const [college, setCollege] = useState('');
+  const[allPosting, setAllPosting] = useState([]);
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
-  const[started, setStarted] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const [started, setStarted] = useState(false);
 
   const vapi = useRef(null);
 
@@ -63,68 +68,63 @@ function Dashboard() {
     setStarted(false);
   }
 
-  const data = [
-    {
-      id: 1,
-      title: `Charger Type-C`,
-      date: `29.04.25`,
-      found: `campus floor`
-    },
-    {
-      id: 2,
-      title: `Charger Type-C`,
-      date: `29.04.25`,
-      found: `campus floor`
-    },
-    {
-      id: 3,
-      title: `Charger Type-C`,
-      date: `29.04.25`,
-      found: `campus floor`
-    },
-    {
-      id: 4,
-      title: `Charger Type-C`,
-      date: `29.04.25`,
-      found: `campus floor`
-    },
-    {
-      id: 5,
-      title: `Charger Type-C`,
-      date: `29.04.25`,
-      found: `campus floor`
-    },
-    {
-      id: 6,
-      title: `Charger Type-C`,
-      date: `29.04.25`,
-      found: `campus floor`
-    },
-    {
-      id: 7,
-      title: `Charger Type-C`,
-      date: `29.04.25`,
-      found: `campus floor`
-    },
-    {
-      id: 8,
-      title: `Charger Type-C`,
-      date: `29.04.25`,
-      found: `campus floor`
-    },
-    {
-      id: 9,
-      title: `Charger Type-C`,
-      date: `29.04.25`,
-      found: `campus floor`
-    },
-    {
-      id: 10,
-      title: `Charger Type-C`,
-      date: `29.04.25`,
-      found: `campus floor`
-    },
-  ];
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get('http://localhost:8080/user/details', {
+          withCredentials: true
+        });
+
+        //console.log(res.data);
+        setCollege(res.data.college);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchPosting = async () => {
+      try {
+        const resp = await axios.get(`http://localhost:8080/user/items/all?college=${encodeURIComponent(college)}`, {
+          withCredentials: true
+        });
+
+        //console.log(resp);
+        setAllPosting(resp.data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchPosting();
+  }, [college]);
+
+  useEffect(() => {
+    const verifyUser = async () => {
+      try {
+        const res = await axios.get('http://localhost:8080/user/verify', {
+          withCredentials: true
+        });
+
+        //console.log(res);
+
+        if (res.data === true) {
+          setVerified(true);
+        }
+        else {
+          navigate('/');
+        }
+      } catch (err) {
+        //console.log(err);
+        navigate('/');
+      }
+    }
+
+    verifyUser();
+  }, []);
 
   const navigateClaim = (Data) => {
     navigate('/user/item/details', { state: Data });
@@ -133,8 +133,12 @@ function Dashboard() {
   return (
 
     <>
-      <div className="w-full bg-black min-h-screen flex flex-col justify-start items-center relative overflow-hidden">
 
+      <div className={`${verified ? "hidden" : "block"} h-screen w-full bg-black flex justify-center items-center`}>
+        <img src={loading} />
+      </div>
+
+      <div className={`w-full ${verified ? "block" : "hidden"} bg-black min-h-screen flex flex-col justify-start items-center relative overflow-hidden`}>
 
         <p onClick={askAI} className={`w-auto ${started ? "hidden" : "block"} z-30 px-5 text-[12px] hover:opacity-75 shadow-md lg:text-lg lg:right-10 lg:bottom-12 py-2 rounded-full cursor-pointer active:scale-95 duration-200 ease-in-out font-Montserrat bg-white text-black fixed bottom-9 right-5 flex justify-center items-center gap-2`}>Ask AI <LuSparkle /></p>
         <p onClick={stopAI} className={`w-auto ${started ? "block" : "hidden"} z-30 px-5 text-[12px] lg:text-lg lg:right-10 lg:bottom-12 py-2 rounded-full cursor-pointer active:scale-95 duration-200 ease-in-out text-white font-Montserrat bg-gradient-to-r from-red-400 via-red-500 to-red-800 fixed bottom-9 right-5 flex justify-center items-center gap-2`}>Stop AI <FaRegCircleStop /></p>
@@ -160,7 +164,7 @@ function Dashboard() {
 
           </div>
 
-          <div className='w-full px-3 md:w-[70%] py-4 h-auto flex flex-wrap justify-between items-center'>
+          {/* <div className='w-full px-3 md:w-[70%] py-4 h-auto flex flex-wrap justify-between items-center'>
 
             <div className='w-[60%] overflow-hidden h-56 lg:h-48 rounded-md lg:rounded-lg bg-gradient-to-br from-blue-300 to-blue-800 flex flex-col justify-evenly items-start gap-3 px-4 py-2'>
               <p className='w-full text-start font-semibold text-white font-Montserrat text-2xl md:text-3xl xl:text-4xl'>Discover last 3 days</p>
@@ -175,13 +179,13 @@ function Dashboard() {
             </div>
           </div>
 
-          <hr className='w-full md:w-[70%] my-4 bg-gray-400 h-[2px]' />
+          <hr className='w-full md:w-[70%] my-4 bg-gray-400 h-[2px]' /> */}
 
           <h1 className='text-white w-full md:w-[70%] font-Montserrat my-5 text-2xl lg:text-4xl text-center px-3'>Explore recent items</h1>
 
           <div className='w-full md:w-[70%] h-auto py-4 px-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-items-center gap-3'>
-            {data.map((it, index) => {
-              return <ItemBox found={it.found} title={it.title} date={it.date} key={index} clickNavigate={() => navigateClaim(it)} />
+            {allPosting.length > 0 && allPosting.map((post, index) => {
+              return <ItemBox found={post.foundAt} img={post.itemImage} by={post.foundBy} title={post.itemName} key={index} clickNavigate={() => navigateClaim(post)} />
             })}
           </div>
         </div>
