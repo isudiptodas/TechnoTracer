@@ -6,6 +6,10 @@ import { MdOutlineArrowDropDown } from "react-icons/md";
 import Vapi from "@vapi-ai/web";
 import { FaRegCircleStop } from "react-icons/fa6";
 import { LuSparkle } from "react-icons/lu";
+import axios from 'axios';
+import loading from '../../assets/loading.gif';
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 function Report() {
 
@@ -13,9 +17,15 @@ function Report() {
     const [info, setInfo] = useState('');
     const [foundAt, setFoundAt] = useState('');
     const [contact, setContact] = useState('');
+    const [foundBy, setFoundBy] = useState('');
+    const [college, setCollege] = useState('');
+    const [email, setEmail] = useState('');
     const [image, setImage] = useState(null);
+    const [verified, setVerified] = useState(false);
     const [category, setCategory] = useState('select');
+    const [userDetails, setUserDetails] = useState(null);
     const [categoryVisible, setCategoryVisible] = useState(false);
+    const navigate = useNavigate();
 
     const [started, setStarted] = useState(false);
 
@@ -24,6 +34,84 @@ function Report() {
     useEffect(() => {
         vapi.current = new Vapi(import.meta.env.VITE_VAPI_PUBLIC);
     }, []);
+
+
+    const reportItem = async () => {
+        if(!itemName || !info || !image || !foundAt || !contact || category === 'select'){
+            toast.error("Please add all the details");
+            return;
+        }
+
+        const form = new FormData();
+
+        const publicKey = import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY;
+        form.append('UPLOADCARE_PUB_KEY', publicKey);
+        form.append('UPLOADCARE_STORE', '1');
+        form.append('file', image);
+
+        let id;
+
+        try {
+            id = toast.loading("Submitting request . . .");
+
+            const res = await axios.post(`https://upload.uploadcare.com/base/`, form, {
+                headers: {
+                    Accept: 'application/json'
+                }
+            });
+
+            //console.log(res);
+            const url = res?.data?.file;
+
+            if(!url){
+                toast.dismiss(id);
+            }
+
+            const cdn = `https://ucarecdn.com/${res.data.file}/-/preview/`
+            //console.log(cdn);
+
+            if(cdn !== null){
+                try {
+                    const resp = await axios.post(`http://localhost:8080/user/report-item`, {
+                        itemName: itemName,
+                        itemImage: cdn,
+                        itemDescription: info,
+                        foundAt: foundAt,
+                        contact: contact,
+                        email: email,
+                        foundBy: foundBy,
+                        itemCategory: category,
+                        college: college
+                    }, {
+                        withCredentials: true
+                    });
+
+                    //console.log(resp);
+
+                    if(resp.status === 200){
+                        setItemname('');
+                        setInfo('');
+                        setCategory('select');
+                        setFoundAt('');
+                        setContact('');
+                        toast.dismiss(id);
+                        toast.success("Submitted for review");
+                        setTimeout(()=> {
+                            navigate('/user/dashboard');
+                        }, 2000);
+                    }
+                } catch (err) {
+                    console.log(`Backend error -> ${err}`);
+                }
+            }
+
+        } catch (err) {
+            console.log(`Main error -> ${err}`);
+        }
+        finally {
+            toast.dismiss(id);
+        }
+    }
 
     const askAI = async () => {
         const options = {
@@ -73,10 +161,56 @@ function Report() {
         'document',
     ];
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+
+                const res = await axios.get('http://localhost:8080/user/details', {
+                    withCredentials: true
+                });
+
+                //console.log(res.data);
+                setUserDetails(res.data);
+                setEmail(res.data.email);
+                setFoundBy(res.data.username);
+                setCollege(res.data.college);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        const verifyUser = async () => {
+            try {
+                const res = await axios.get('http://localhost:8080/user/verify', {
+                    withCredentials: true
+                });
+
+                //console.log(res);
+
+                if (res.data === true) {
+                    setVerified(true);
+                }
+                else {
+                    navigate('/');
+                }
+            } catch (err) {
+                //console.log(err);
+                navigate('/');
+            }
+        }
+
+        verifyUser();
+        fetchUser();
+    }, []);
+
     return (
 
         <>
-            <div className="w-full min-h-screen overflow-hidden bg-black flex flex-col justify-start items-center relative">
+            <div className={`${verified ? "hidden" : "block"} h-screen w-full bg-black flex justify-center items-center`}>
+                <img src={loading} />
+            </div>
+
+            <div className={`${verified ? "block" : "hidden"} w-full min-h-screen overflow-hidden bg-black flex flex-col justify-start items-center relative`}>
                 <MenuBar />
 
                 <p onClick={askAI} className={`w-auto ${started ? "hidden" : "block"} z-30 px-5 text-[12px] hover:opacity-75 shadow-md lg:text-lg lg:right-10 lg:bottom-12 py-2 rounded-full cursor-pointer active:scale-95 duration-200 ease-in-out font-Montserrat bg-white text-black fixed bottom-9 right-5 flex justify-center items-center gap-2`}>Ask AI <LuSparkle /></p>
@@ -92,18 +226,18 @@ function Report() {
                         <IoIosCloudUpload className={`text-gray-400 text-5xl ${image === null ? "block" : "hidden"}`} />
                         <p className={`w-full text-gray-300 text-[10px] py-2 font-Montserrat text-center ${image === null ? "block" : "hidden"}`}>Click here to upload image</p>
                         <p className={`w-full text-gray-300 text-[12px] lg:text-lg py-2 font-Montserrat text-center ${image === null ? "hidden" : "block"}`}>{image?.name}</p>
-                        <input onChange={(e) => setImage(e.target.files[0])} type="file" className="bg-white h-full w-full absolute opacity-0" />
+                        <input onChange={(e) => { if(!e.target.files[0].type.startsWith("image/")){toast.error("Image format not supported"); return} setImage(e.target.files[0]);}} type="file" className="bg-white h-full w-full absolute opacity-0" />
                     </div>
 
                     <div className={`w-full ${image === null ? "hidden" : "block"} flex justify-center items-center gap-3`}>
-                        <p className="w-auto px-3 py-2 rounded-md text-white bg-blue-500 cursor-pointer hover:opacity-65 duration-150 ease-in-out relative overflow-hidden">Change <input type="file" onChange={(e) => setImage(e.target.files[0])} className="absolute left-0 opacity-0" /></p>
+                        <p className="w-auto px-3 py-2 rounded-md text-white bg-blue-500 cursor-pointer hover:opacity-65 duration-150 ease-in-out relative overflow-hidden">Change <input type="file" onChange={(e) => {if(!e.target.files[0].type.startsWith("image/")){toast.error("Image format not supported"); return} setImage(e.target.files[0]);}} className="absolute left-0 opacity-0" /></p>
                         <p className="w-auto px-3 py-2 rounded-md text-white bg-red-500 cursor-pointer hover:opacity-65 duration-150 ease-in-out" onClick={() => { setImage(null) }}>Remove</p>
                     </div>
 
-                    <input type="text" className="w-full py-2 px-3 rounded-md bg-black mt-5 text-white placeholder-gray-400 font-Montserrat outline-none" placeholder="Enter item name" />
-                    <textarea className="w-full h-44 py-2 px-3 rounded-md bg-black text-white placeholder-gray-400 font-Montserrat outline-none" placeholder="Enter brief info" />
-                    <input type="text" className="w-full py-2 px-3 rounded-md bg-black mt-1 text-white placeholder-gray-400 font-Montserrat outline-none" placeholder="Item found at" />
-                    <input type="text" className="w-full py-2 px-3 rounded-md bg-black mt-1 text-white placeholder-gray-400 font-Montserrat outline-none" placeholder="Enter contact number" />
+                    <input onChange={(e) => setItemname(e.target.value)} type="text" className="w-full py-2 px-3 rounded-md bg-black mt-5 text-white placeholder-gray-400 font-Montserrat outline-none" placeholder="Enter item name" value={itemName}/>
+                    <textarea onChange={(e) => setInfo(e.target.value)} className="w-full h-44 py-2 px-3 rounded-md bg-black text-white placeholder-gray-400 font-Montserrat outline-none" placeholder="Enter brief info" value={info} />
+                    <input onChange={(e) => setFoundAt(e.target.value)} type="text" className="w-full py-2 px-3 rounded-md bg-black mt-1 text-white placeholder-gray-400 font-Montserrat outline-none" placeholder="Item found at" value={foundAt}/>
+                    <input onChange={(e) => setContact(e.target.value)} type="text" className="w-full py-2 px-3 rounded-md bg-black mt-1 text-white placeholder-gray-400 font-Montserrat outline-none" placeholder="Enter contact number" value={contact}/>
                     <p className="w-full text-start text-white font-Montserrat text-[14px] px-2 lg:text-lg">Select category : </p>
                     <p onClick={() => { setCategoryVisible(!categoryVisible) }} className={`capitalize w-full flex justify-between items-center px-2 py-2 ${categoryVisible ? "bg-white text-black" : "bg-black text-white"} font-Montserrat text-[14px] lg:text-lg cursor-pointer rounded-md`}>{category}<MdOutlineArrowDropDown className="text-2xl" /></p>
 
@@ -113,7 +247,7 @@ function Report() {
                         })}
                     </div>
 
-                    <p className="w-full py-2 lg:py-3 rounded-md text-center bg-white text-black font-Montserrat text-[12px] lg:text-lg cursor-pointer hover:opacity-70 ease-in-out duration-200 active:scale-95 font-semibold mt-1">Submit for review</p>
+                    <p className="w-full py-2 lg:py-3 rounded-md text-center bg-white text-black font-Montserrat text-[12px] lg:text-lg cursor-pointer hover:opacity-70 ease-in-out duration-200 active:scale-95 font-semibold mt-1" onClick={reportItem}>Submit for review</p>
                 </div>
 
 
