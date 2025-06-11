@@ -6,12 +6,64 @@ import Marquee from "react-fast-marquee";
 import Accordian from "../components/Accordian";
 import { faq } from '../data/accordianFAQ.js';
 import Footer from "../components/Footer.jsx";
+import { useEffect, useState } from "react";
+import { RxDoubleArrowRight } from "react-icons/rx";
+import meme from '../assets/meme.png';
 
 function LandingPage() {
 
+  const [pageLoaded, setPageLoaded] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const [loadingEnded, setLoadingEnded] = useState(false);
+
+  useEffect(() => {
+    const startAudio = () => {
+      const audio = new Audio("/technologia.mp3");
+      audio.play();
+    }
+
+    // if(loadingEnded){
+    //   setTimeout(()=> {
+    //     startAudio();
+    //   },500);
+    // }
+
+    if (loadingEnded) {
+      startAudio();
+    }
+
+    if (loadingEnded) {
+      setTimeout(() => {
+        setPageLoaded(true);
+      }, 5000);
+    }
+
+  }, [loadingEnded]);
+
   return (
     <>
-      <div className="w-full bg-black overflow-hidden relative min-h-screen flex flex-col justify-start items-center">
+
+      {/* <div className={`w-full absolute z-50 bg-black h-screen overflow-hidden flex flex-col justify-center items-center gap-4 transition-transform duration-500 ease-in-out ${pageLoaded ? "-translate-y-full" : "translate-y-0"}`}>
+        <div className={` absolute -translate-x-1/2 -translate-y-1/2 top-[45%] lg:top-[40%] left-1/2 w-auto inline-block p-[1.5px] overflow-hidden h-auto justify-center items-center rounded-full bg-gradient-to-r from-orange-400 via-yellow-400 to-emerald-500`}>
+          <p onClick={() => setClicked(true)} className={` w-auto px-3 py-2 rounded-full bg-black text-white font-Neuropol text-xl flex justify-center items-center gap-2 cursor-pointer`}>Enter <RxDoubleArrowRight /></p>
+        </div>
+
+        {clicked && (
+          <CountUp
+            className="text-white absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 text-xl lg:text-3xl font-Neuropol"
+            start={0}
+            duration={3}
+            end={100}
+            onEnd={() => { setLoadingEnded(true); }}
+          />
+        )}
+        <h1 className={`text-white z-50 bg-black h-screen flex justify-center items-center tracking-widest w-full ${loadingEnded ? "block" : "hidden"} font-DuneRise text-2xl lg:text-5xl xl:text-6xl motion-preset-focus motion-duration-2000 flex justify-center items-center gap-4`}>TECHNOLOGIA <img src={meme} className={` h-24 w-24 lg:h-32 lg:w-32 hidden md:block motion-preset-focus motion-duration-2000`} /></h1>
+        <div className={`absolute md:hidden w-full bg-transparent h-full z-50 flex justify-center items-center`}>
+          <img src={meme} className={`${loadingEnded ? "block" : "hidden"}  h-32 w-32 mt-44 motion-scale-in-[0.5] motion-rotate-in-[-10deg] motion-blur-in-[10px] motion-delay-[0.75s]/rotate motion-delay-[0.75s]/blur`} />
+        </div>
+      </div> */}
+
+      <div className={` w-full bg-black overflow-hidden relative min-h-screen flex flex-col justify-start items-center`}>
         <div className="h-56 w-56 lg:h-[500px] lg:w-72 z-10 absolute rounded-full bg-gradient-to-br from-emerald-400 via-yellow-300 to-orange-800 -top-5 -left-16 blur-3xl lg:blur-[100px]"></div>
         <div className="h-56 w-56 lg:h-[300px] lg:w-[600px] z-10 absolute rounded-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-black -top-20 left-24 blur-2xl lg:blur-[80px]"></div>
 
@@ -78,7 +130,7 @@ function LandingPage() {
         </div>
 
         {/* footer */}
-        <Footer/>
+        <Footer />
 
       </div>
     </>
