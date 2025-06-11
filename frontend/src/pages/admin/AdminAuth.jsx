@@ -3,29 +3,55 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { IoEnterOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'sonner';
 import Footer from "../../components/Footer";
+import axios from "axios";
 
 function AdminAuth() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [visible, setVisible] = useState(false);
+    const navigate = useNavigate();
 
     const login = async () => {
         if (!email || !password) {
             toast.error("All fields required");
             return;
         }
-
+        let id;
         try {
-            const id = toast.loading("Logging you in . . .");
-            setTimeout(() => {
+            id = toast.loading("Logging you in . . .");
+
+            const res = await axios.post(`http://localhost:8080/login/admin`, {
+                email: email,
+                password: password,
+                role: "ADMIN"
+            }, {
+                withCredentials: true
+            });
+
+            //console.log(res.data);
+
+            if (res.status === 200) {
                 toast.dismiss(id);
-            }, 2000);
+                toast.success("Login Successfull");
+                setTimeout(() => {
+                    navigate('/admin/dashboard');
+                }, 2000);
+            }
         } catch (err) {
+            if (err?.response?.data) {
+                toast.error(err?.response?.data);
+            }
+            else {
+                toast.error("Something went wrong");
+            }
             console.log(err.message);
+        }
+        finally {
+            toast.dismiss(id);
         }
     }
 
@@ -52,12 +78,12 @@ function AdminAuth() {
                 </div>
 
                 <div className="w-full mb-20 py-2 flex justify-center items-center mt-10 md:w-[60%] lg:w-[40%]">
-                    <Link to='/auth' className="w-auto active:scale-95 duration-150 ease-in-out text-center pl-4 pr-2 py-1 text-[12px] md:text-sm rounded-full font-Montserrat bg-white text-black flex justify-center items-center gap-2 duration-200 ease-in-out">Enter as user ●</Link>
+                    <Link to='/auth' className="w-auto active:scale-95 text-center pl-4 pr-2 py-1 text-[12px] md:text-sm rounded-full font-Montserrat bg-white text-black flex justify-center items-center gap-2 duration-200 ease-in-out">Enter as user ●</Link>
                 </div>
 
                 <div className="w-full h-44"></div>
 
-                <Footer/>
+                <Footer />
 
             </div>
         </>
